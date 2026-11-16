@@ -1,0 +1,51 @@
+
+name: Warline Automatic Weekly Schedule
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Every Sunday at 18:00 UTC
+    - cron: "0 18 * * 0"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: warline-weekly-schedule
+  cancel-in-progress: false
+
+jobs:
+  weekly-schedule:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check website and post schedule
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python schedule_bot.py
+
+      - name: Save posted schedule history
+        run: |
+          if [ -f schedule_history.json ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add schedule_history.json
+
+            if ! git diff --cached --quiet; then
+              git commit -m "Save weekly schedule history"
+              git pull --rebase
+              git push
+            fi
+          fi
