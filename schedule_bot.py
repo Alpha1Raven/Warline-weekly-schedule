@@ -183,12 +183,12 @@ def get_sources(config):
 def next_week():
     today = datetime.now(timezone.utc).date()
 
-    # Always select the upcoming Monday.
-    days_until = (7 - today.weekday()) % 7
-    if days_until == 0:
-        days_until = 7
+    # Monday-Saturday: current week's Monday
+    # Sunday: next week's Monday
+    if today.weekday() == 6:
+        return today + timedelta(days=1)
 
-    return today + timedelta(days=days_until)
+    return today - timedelta(days=today.weekday())
 
 
 def build_embeds(data, monday, config):
