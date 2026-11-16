@@ -1,0 +1,14 @@
+
+{
+  "timezone": "UTC",
+  "notification": "everyone",
+  "post_time_utc": "18:00",
+  "sources": {
+    "daily_vs": "https://thearchangels.netlify.app/pages/events/daily-and-vs-event.html",
+    "frostfall": "https://thearchangels.netlify.app/pages/events/frostfall.html",
+    "sandstrike": "https://thearchangels.netlify.app/pages/events/sandstrike.html",
+    "alliance_exercises": "https://thearchangels.netlify.app/pages/events/alliance-exercises.html"
+  },
+  "manual_notes": []
+}
+
